@@ -13,3 +13,11 @@ class CreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         """save post data when creating new bucketlist"""
         serializer.save()
+
+class DetailsView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    RetrieveUpdateDestroyAPIView is a generic view that provides GET(one),
+    PUT, PATCH and DELETE method handlers
+    """
+    queryset = Bucketlist.objects.all()
+    serializer_class = BucketlistSerializer
