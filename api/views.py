@@ -7,6 +7,7 @@ from .models import Bucketlist
 # handlers
 class CreateView(generics.ListCreateAPIView):
     """defines create behavior of rest api"""
+    # query set is the collection of items we are trying to view
     queryset = Bucketlist.objects.all()
     serializer_class = BucketlistSerializer
 

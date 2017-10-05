@@ -6,16 +6,28 @@ from django.core.urlresolvers import reverse
 
 class ModelTestCase(TestCase):
     """defines the test suite for the Bucketlist model"""
-    def setUp(self):
-        """define test client and other test variables"""
-        self.bucketlist_name = 'Write world class code'
-        self.bucketlist = Bucketlist(name=self.bucketlist_name)
+    # def setUp(self):
+    #     """define test client and other test variables"""
+    #     self.bucketlist_name = 'Write world class code'
+    #     self.bucketlist = Bucketlist(name=self.bucketlist_name)
 
     def test_model_can_create_a_bucketlist(self):
         """test bucketlist model can create a bucketlist"""
+        self.bucketlist_name = 'Write world class code'
+        self.bucketlist = Bucketlist(name=self.bucketlist_name)
         old_count = Bucketlist.objects.count()
         self.bucketlist.save()
-        self.assertNotEqual(Bucketlist.objects.count(), old_count)
+        self.assertEqual(Bucketlist.objects.count(), old_count + 1)
+
+    def test_model_activate_pre_save_method(self):
+        """tests that custom pre_save method is working correctly"""
+        self.bucketlist_name = 'xyz'
+        self.bucketlist = Bucketlist(name=self.bucketlist_name)
+        old_count = Bucketlist.objects.count()
+        self.bucketlist.save()
+        self.assertEqual(Bucketlist.objects.count(), old_count + 1)
+        bucketlist = Bucketlist.objects.get()
+        self.assertEqual(bucketlist.name, 'xyz<-LESS-THAN-5-CHARS-FROM-PRE-SAVE-SIGNAL')
 
 class ViewTestCase(TestCase):
     """test suite for api views, sort of like controller tests in Rails"""
